@@ -15,8 +15,8 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.ts'],
       // server.ts only wires process signals/listen(); it is exercised manually, not by unit tests.
-      // *.d.ts / types-only files contain no executable logic.
-      exclude: ['src/server.ts', 'src/**/*.d.ts', 'src/domain/types.ts', 'src/types/**'],
+      // *.d.ts and src/domain/inventory.ts are type-only files: they contain no executable code.
+      exclude: ['src/server.ts', 'src/**/*.d.ts', 'src/domain/inventory.ts', 'src/types/**'],
       reporter: ['text', 'html', 'lcov'],
       // Target from the brief: >= 80% for business logic (services) and middleware.
       thresholds: {
