@@ -186,6 +186,8 @@ describe('GET /api/vehicles/search', () => {
 
   it('treats LIKE wildcards in user input literally', async () => {
     expect((await search('make=%25')).body.data).toEqual([]);
+    expect((await search('make=T_yota')).body.data).toEqual([]); // "_" must not match any single character
+    expect(models(await search('make=Toyota'))).toEqual(['Camry', 'RAV4']);
   });
 
   it.each(['minPrice=abc', 'maxPrice=-1', 'minPrice=500&maxPrice=100', 'year=20x2', 'limit=0', 'make=a&make=b'])('rejects invalid filters (%s) with 400', async (qs) => {

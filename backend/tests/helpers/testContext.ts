@@ -53,7 +53,14 @@ export function createTestContext(overrides: Partial<AppConfig> = {}) {
     return { user, password, token, auth: `Bearer ${token}` };
   }
 
-  return { app, prisma, config, tokens, resetDatabase, createUser, close: () => prisma.$disconnect() };
+  /** Inserts a vehicle directly through Prisma (bypassing the API) so tests control their own fixtures. */
+  async function createVehicle(overrides: Partial<{ make: string; model: string; category: string; price: number; quantity: number; year: number | null; description: string | null; imageUrl: string | null }> = {}) {
+    return prisma.vehicle.create({
+      data: { make: 'Toyota', model: 'Camry', category: 'Sedan', price: 20000, quantity: 5, year: 2023, ...overrides },
+    });
+  }
+
+  return { app, prisma, config, tokens, resetDatabase, createUser, createVehicle, close: () => prisma.$disconnect() };
 }
 
 export type TestContext = ReturnType<typeof createTestContext>;

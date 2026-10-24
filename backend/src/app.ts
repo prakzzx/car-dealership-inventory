@@ -13,6 +13,10 @@ import { AuthController } from './modules/auth/auth.controller';
 import { createAuthRouter } from './modules/auth/auth.routes';
 import { AuthService } from './modules/auth/auth.service';
 import { PrismaUserRepository } from './modules/auth/user.repository';
+import { VehicleController } from './modules/vehicles/vehicle.controller';
+import { PrismaVehicleRepository } from './modules/vehicles/vehicle.repository';
+import { createVehicleRouter } from './modules/vehicles/vehicle.routes';
+import { VehicleService } from './modules/vehicles/vehicle.service';
 import { asyncHandler } from './utils/asyncHandler';
 import { BcryptPasswordHasher } from './utils/password.hasher';
 import { sendSuccess } from './utils/response';
@@ -37,6 +41,9 @@ export function createApp({ config, prisma }: AppDependencies): Express {
     tokenService,
   });
   const authController = new AuthController(authService);
+
+  const vehicleRepository = new PrismaVehicleRepository(prisma);
+  const vehicleController = new VehicleController(new VehicleService(vehicleRepository));
 
   const credentialsLimiter = rateLimit({
     windowMs: config.authRateLimitWindowMs,
@@ -67,6 +74,7 @@ export function createApp({ config, prisma }: AppDependencies): Express {
   );
 
   app.use('/api/auth', createAuthRouter(authController, authenticate, credentialsLimiter));
+  app.use('/api/vehicles', createVehicleRouter(vehicleController, authenticate));
 
   app.use(notFoundHandler);
   app.use(createErrorHandler(config.nodeEnv));
