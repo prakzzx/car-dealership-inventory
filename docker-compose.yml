@@ -1,0 +1,26 @@
+# Local PostgreSQL for AutoHub.
+# Credentials/db names here MUST match DATABASE_URL / TEST_DATABASE_URL in the .env.example files.
+name: autohub
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: autohub-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-autohub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-autohub_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-autohub}
+    ports:
+      - "5432:5432"
+    volumes:
+      # Named volume => data survives `docker compose down` (use `down -v` to wipe it).
+      - autohub_pgdata:/var/lib/postgresql/data
+      # Runs only on the FIRST start of an empty volume: creates the isolated test database.
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-autohub} -d $${POSTGRES_DB:-autohub}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  autohub_pgdata:

@@ -1,0 +1,66 @@
+// AutoHub data model.
+// engineType = "client" => Prisma uses the JS query compiler + the `pg` driver adapter (no native query-engine binary).
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         Role       @default(CUSTOMER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  purchases    Purchase[]
+}
+
+model Vehicle {
+  id          String     @id @default(uuid())
+  make        String
+  model       String
+  category    String
+  // Decimal (not Float) so money never suffers binary floating point rounding.
+  price       Decimal    @db.Decimal(12, 2)
+  quantity    Int
+  year        Int?
+  description String?
+  imageUrl    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  purchases   Purchase[]
+
+  @@index([make])
+  @@index([model])
+  @@index([category])
+  @@index([price])
+}
+
+// Audit trail of every purchase. vehicleId is nullable + SetNull so an admin can delete a vehicle
+// without losing the historical record (vehicleName/unitPrice are snapshots).
+model Purchase {
+  id          String   @id @default(uuid())
+  vehicleId   String?
+  userId      String
+  vehicleName String
+  quantity    Int
+  unitPrice   Decimal  @db.Decimal(12, 2)
+  totalPrice  Decimal  @db.Decimal(14, 2)
+  createdAt   DateTime @default(now())
+  vehicle     Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([vehicleId])
+}

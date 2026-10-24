@@ -1,0 +1,31 @@
+{
+  "name": "car-dealership-inventory",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AutoHub - Car Dealership Inventory System (TDD kata)",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "docs"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "postinstall": "npm run db:generate -w backend",
+    "dev": "concurrently -n api,web -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "test": "npm run test -w backend && npm run test -w frontend",
+    "test:coverage": "npm run test:coverage -w backend && npm run test:coverage -w frontend",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "typecheck": "npm run typecheck -w backend && npm run typecheck -w frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.5"
+  }
+}

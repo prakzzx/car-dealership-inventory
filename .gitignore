@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+# secrets (only *.example files are committed)
+.env
+.env.*
+!.env.example
+# builds / output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+# logs
+*.log
+npm-debug.log*
+# editor / OS
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
