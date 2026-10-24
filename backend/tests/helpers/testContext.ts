@@ -34,7 +34,7 @@ export function createTestContext(overrides: Partial<AppConfig> = {}) {
   const tokens = new TokenService({ secret: config.jwtSecret, expiresIn: config.jwtExpiresIn });
 
   async function resetDatabase(): Promise<void> {
-    const rows = await prisma.$queryRaw<{ db: string }[]>`SELECT current_database() AS db`;
+    const rows = await prisma.$queryRaw<{ db: string }[]>`SELECT current_database()::text AS db`;
     assertConnectedToTestDatabase(rows[0]?.db ?? '');
     await prisma.$executeRawUnsafe('TRUNCATE TABLE "Purchase", "Vehicle", "User" RESTART IDENTITY CASCADE');
   }
