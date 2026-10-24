@@ -13,6 +13,10 @@ import { AuthController } from './modules/auth/auth.controller';
 import { createAuthRouter } from './modules/auth/auth.routes';
 import { AuthService } from './modules/auth/auth.service';
 import { PrismaUserRepository } from './modules/auth/user.repository';
+import { InventoryController } from './modules/inventory/inventory.controller';
+import { PrismaInventoryRepository } from './modules/inventory/inventory.repository';
+import { registerInventoryRoutes } from './modules/inventory/inventory.routes';
+import { InventoryService } from './modules/inventory/inventory.service';
 import { VehicleController } from './modules/vehicles/vehicle.controller';
 import { PrismaVehicleRepository } from './modules/vehicles/vehicle.repository';
 import { createVehicleRouter } from './modules/vehicles/vehicle.routes';
@@ -44,6 +48,7 @@ export function createApp({ config, prisma }: AppDependencies): Express {
 
   const vehicleRepository = new PrismaVehicleRepository(prisma);
   const vehicleController = new VehicleController(new VehicleService(vehicleRepository));
+  const inventoryController = new InventoryController(new InventoryService(new PrismaInventoryRepository(prisma)));
 
   const credentialsLimiter = rateLimit({
     windowMs: config.authRateLimitWindowMs,
@@ -74,7 +79,7 @@ export function createApp({ config, prisma }: AppDependencies): Express {
   );
 
   app.use('/api/auth', createAuthRouter(authController, authenticate, credentialsLimiter));
-  app.use('/api/vehicles', createVehicleRouter(vehicleController, authenticate));
+  app.use('/api/vehicles', createVehicleRouter(vehicleController, authenticate, (router) => registerInventoryRoutes(router, inventoryController)));
 
   app.use(notFoundHandler);
   app.use(createErrorHandler(config.nodeEnv));
