@@ -1,0 +1,161 @@
+
+> car-dealership-inventory@1.0.0 test:coverage
+> npm run test:coverage -w backend && npm run test:coverage -w frontend
+
+
+> @autohub/backend@1.0.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v3.2.7 /home/claude/car-dealership-inventory/backend
+      Coverage enabled with v8
+
+ ✓ tests/integration/vehicles.test.ts (54 tests) 3369ms
+ ✓ tests/integration/inventory.test.ts (27 tests) 2556ms
+   ✓ concurrent purchases (no overselling, never negative) > 20 parallel single-unit purchases of 5 units: exactly 5 succeed, 15 get 409  306ms
+ ✓ tests/integration/auth.test.ts (20 tests) 998ms
+ ✓ tests/integration/app.test.ts (6 tests) 161ms
+ ✓ tests/unit/vehicleService.test.ts (9 tests) 20ms
+ ✓ tests/unit/vehicleSchemas.test.ts (29 tests) 28ms
+ ✓ tests/unit/authService.test.ts (9 tests) 22ms
+ ✓ tests/unit/inventoryService.test.ts (12 tests) 21ms
+ ✓ tests/unit/errorHandler.test.ts (7 tests) 17ms
+ ✓ tests/unit/authMiddleware.test.ts (8 tests) 16ms
+ ✓ tests/unit/tokenService.test.ts (4 tests) 14ms
+ ✓ tests/unit/config.test.ts (5 tests) 10ms
+
+ Test Files  12 passed (12)
+      Tests  190 passed (190)
+   Start at  15:37:31
+   Duration  18.15s (transform 727ms, setup 272ms, collect 3.61s, tests 7.23s, environment 5ms, prepare 2.34s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |    99.1 |    95.33 |     100 |    99.1 |                   
+ src               |   97.01 |    66.66 |     100 |   97.01 |                   
+  app.ts           |   97.01 |    66.66 |     100 |   97.01 | 75-76             
+ src/config        |     100 |      100 |     100 |     100 |                   
+  env.ts           |     100 |      100 |     100 |     100 |                   
+ src/db            |     100 |      100 |     100 |     100 |                   
+  prisma.ts        |     100 |      100 |     100 |     100 |                   
+ src/domain        |     100 |      100 |     100 |     100 |                   
+  types.ts         |     100 |      100 |     100 |     100 |                   
+  vehicle.ts       |     100 |      100 |     100 |     100 |                   
+ src/errors        |     100 |      100 |     100 |     100 |                   
+  AppError.ts      |     100 |      100 |     100 |     100 |                   
+ src/middleware    |     100 |      100 |     100 |     100 |                   
+  authenticate.ts  |     100 |      100 |     100 |     100 |                   
+  errorHandler.ts  |     100 |      100 |     100 |     100 |                   
+  notFound.ts      |     100 |      100 |     100 |     100 |                   
+  requireRole.ts   |     100 |      100 |     100 |     100 |                   
+ src/modules/auth  |     100 |    96.87 |     100 |     100 |                   
+  ...controller.ts |     100 |    88.88 |     100 |     100 | 22                
+  auth.routes.ts   |     100 |      100 |     100 |     100 |                   
+  auth.schemas.ts  |     100 |      100 |     100 |     100 |                   
+  auth.service.ts  |     100 |      100 |     100 |     100 |                   
+  ...repository.ts |     100 |      100 |     100 |     100 |                   
+ ...ules/inventory |   98.19 |       90 |     100 |   98.19 |                   
+  ...controller.ts |     100 |    66.66 |     100 |     100 | 12-14,20          
+  ...repository.ts |      96 |    91.66 |     100 |      96 | 66-67             
+  ...ory.routes.ts |     100 |      100 |     100 |     100 |                   
+  ...ry.schemas.ts |     100 |      100 |     100 |     100 |                   
+  ...ry.service.ts |     100 |      100 |     100 |     100 |                   
+ ...dules/vehicles |   98.99 |    94.44 |     100 |   98.99 |                   
+  ...controller.ts |     100 |      100 |     100 |     100 |                   
+  ...repository.ts |   97.18 |    86.66 |     100 |   97.18 | 36-37             
+  ...cle.routes.ts |     100 |      100 |     100 |     100 |                   
+  ...le.schemas.ts |     100 |      100 |     100 |     100 |                   
+  ...le.service.ts |     100 |      100 |     100 |     100 |                   
+ src/utils         |     100 |      100 |     100 |     100 |                   
+  asyncHandler.ts  |     100 |      100 |     100 |     100 |                   
+  ...ord.hasher.ts |     100 |      100 |     100 |     100 |                   
+  response.ts      |     100 |      100 |     100 |     100 |                   
+  token.service.ts |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------
+
+> @autohub/frontend@1.0.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v3.2.7 /home/claude/car-dealership-inventory/frontend
+      Coverage enabled with v8
+
+ ✓ tests/dashboard.test.tsx (16 tests) 5068ms
+   ✓ DashboardPage - rendering > renders summary cards from the stats API (no hard-coded numbers)  628ms
+   ✓ DashboardPage - search, filter, sort, pagination > searches by make and model on submit  427ms
+   ✓ DashboardPage - search, filter, sort, pagination > applies a price range  449ms
+   ✓ DashboardPage - search, filter, sort, pagination > rejects an inverted price range before calling the API  502ms
+   ✓ DashboardPage - search, filter, sort, pagination > sorts and can include sold-out vehicles  340ms
+   ✓ DashboardPage - search, filter, sort, pagination > Reset restores defaults  463ms
+ ✓ tests/auth-forms.test.tsx (11 tests) 4057ms
+   ✓ LoginPage > shows required-field messages when submitted empty and does not call the API  687ms
+   ✓ LoginPage > shows the server message for bad credentials  312ms
+   ✓ RegisterPage > rejects a weak password (short) with a helpful message  320ms
+   ✓ RegisterPage > rejects a weak password (no uppercase) with a helpful message  369ms
+   ✓ RegisterPage > rejects a weak password (no digit) with a helpful message  460ms
+   ✓ RegisterPage > requires the confirmation to match  392ms
+   ✓ RegisterPage > registers (without sending the confirmation) and logs the user in  433ms
+   ✓ RegisterPage > shows the duplicate-email error from the server  406ms
+ ✓ tests/admin.test.tsx (10 tests) 3030ms
+   ✓ AdminPage > lists every vehicle including sold-out ones  731ms
+   ✓ AdminPage > restocks a vehicle with a validated quantity  393ms
+   ✓ VehicleFormPage (add) > rejects a negative price, fractional quantity and non-http image URL  332ms
+   ✓ VehicleFormPage (add) > submits numbers (not strings) to the API and returns to the admin list  414ms
+   ✓ VehicleFormPage (add) > shows server-side validation errors  312ms
+ ✓ tests/header.test.tsx (3 tests) 982ms
+   ✓ role-aware navigation > shows branding, the user name and NO admin link to a customer  585ms
+ ✓ tests/routes.test.tsx (8 tests) 1213ms
+   ✓ route protection > redirects an anonymous visitor to the login page  468ms
+ ✓ tests/vehicle-card.test.tsx (8 tests) 920ms
+   ✓ VehicleCard > shows make, model, category, year, price and stock  307ms
+ ✓ tests/api-layer.test.ts (9 tests) 37ms
+
+ Test Files  7 passed (7)
+      Tests  65 passed (65)
+   Start at  15:37:50
+   Duration  36.23s (transform 1.11s, setup 1.48s, collect 4.74s, tests 15.31s, environment 9.16s, prepare 1.42s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   98.29 |     92.3 |      92 |   98.29 |                   
+ src               |     100 |      100 |     100 |     100 |                   
+  App.tsx          |     100 |      100 |     100 |     100 |                   
+  types.ts         |       0 |        0 |       0 |       0 |                   
+ src/api           |    97.8 |    95.34 |     100 |    97.8 |                   
+  client.ts        |   96.15 |     93.1 |     100 |   96.15 | 12-13             
+  endpoints.ts     |     100 |      100 |     100 |     100 |                   
+ src/components    |   97.09 |    87.15 |   89.47 |   97.09 |                   
+  AppLayout.tsx    |     100 |      100 |     100 |     100 |                   
+  ...irmDialog.tsx |     100 |      100 |     100 |     100 |                   
+  FormField.tsx    |     100 |      100 |     100 |     100 |                   
+  Header.tsx       |     100 |    81.81 |      50 |     100 | 28-31             
+  Modal.tsx        |   82.14 |    61.53 |     100 |   82.14 | 39-42,44-49       
+  Pagination.tsx   |     100 |      100 |   66.66 |     100 |                   
+  ...ctedRoute.tsx |     100 |      100 |     100 |     100 |                   
+  ...chFilters.tsx |     100 |      100 |     100 |     100 |                   
+  ...eMessages.tsx |     100 |       80 |     100 |     100 | 23                
+  StatsCards.tsx   |     100 |      100 |     100 |     100 |                   
+  VehicleCard.tsx  |     100 |    95.65 |     100 |     100 | 50                
+  ...dSkeleton.tsx |     100 |      100 |     100 |     100 |                   
+  ...ailsModal.tsx |   92.85 |    16.66 |     100 |   92.85 | 41-44             
+  VehicleImage.tsx |     100 |      100 |     100 |     100 |                   
+ src/context       |     100 |    94.59 |      75 |     100 |                   
+  AuthContext.tsx  |     100 |       95 |   66.66 |     100 | 76                
+  ToastContext.tsx |     100 |    94.11 |      80 |     100 | 61                
+ src/lib           |     100 |    94.54 |     100 |     100 |                   
+  filters.ts       |     100 |       95 |     100 |     100 | 40                
+  format.ts        |     100 |      100 |     100 |     100 |                   
+  schemas.ts       |     100 |    94.11 |     100 |     100 | 38,40             
+ src/pages         |   98.67 |    93.52 |    92.3 |   98.67 |                   
+  AdminPage.tsx    |   95.95 |    85.36 |   81.81 |   95.95 | 37,97,117,140-144 
+  AuthLayout.tsx   |     100 |      100 |     100 |     100 |                   
+  ...boardPage.tsx |     100 |    95.83 |     100 |     100 | 77,99             
+  LoginPage.tsx    |     100 |      100 |     100 |     100 |                   
+  NotFoundPage.tsx |     100 |      100 |     100 |     100 |                   
+  RegisterPage.tsx |     100 |      100 |     100 |     100 |                   
+  ...eFormPage.tsx |     100 |    93.18 |     100 |     100 | 55,68,104         
+-------------------|---------|----------|---------|---------|-------------------

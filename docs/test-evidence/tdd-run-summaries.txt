@@ -1,0 +1,89 @@
+# Real RED/GREEN run summaries (extracted from the actual command output in the AI sandbox; paths are the sandbox paths)
+# Each block = summary lines of one 'vitest run'. Order = order they happened.
+
+== red-auth.log ==
+      Tests  no tests
+ Test Files  7 failed (7)
+Caused by: Error: Failed to load url ../../src/app (resolved id: ../../src/app) in /home/claude/car-dealership-inventory/backend/tests/helpers/testContext.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/config/env (resolved id: ../../src/config/env) in /home/claude/car-dealership-inventory/backend/tests/unit/config.test.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/middleware/authenticate (resolved id: ../../src/middleware/authenticate) in /home/claude/car-dealership-inventory/backend/tests/unit/authMiddleware.test.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/middleware/errorHandler (resolved id: ../../src/middleware/errorHandler) in /home/claude/car-dealership-inventory/backend/tests/unit/errorHandler.test.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/modules/auth/auth.service (resolved id: ../../src/modules/auth/auth.service) in /home/claude/car-dealership-inventory/backend/tests/unit/authService.test.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/utils/token.service (resolved id: ../../src/utils/token.service) in /home/claude/car-dealership-inventory/backend/tests/helpers/testContext.ts. Does the file exist?
+
+== green1-auth.log ==
+      Tests  5 failed | 28 passed (33)
+ Test Files  3 failed | 4 passed (7)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+== green2-auth.log ==
+      Tests  20 failed | 39 passed (59)
+ Test Files  1 failed | 6 passed (7)
+⎯⎯⎯⎯⎯⎯ Failed Tests 20 ⎯⎯⎯⎯⎯⎯⎯
+
+== green3-auth.log ==
+      Tests  59 passed (59)
+ Test Files  7 passed (7)
+
+== red-vehicles.log ==
+      Tests  53 failed | 60 passed (113)
+   ✓ PUT /api/vehicles/:id > 404 when the vehicle does not exist 24ms
+ Test Files  3 failed | 7 passed (10)
+Caused by: Error: Failed to load url ../../src/modules/vehicles/vehicle.schemas (resolved id: ../../src/modules/vehicles/vehicle.schemas) in /home/claude/car-dealership-inventory/backend/tests/unit/vehicleSchemas.test.ts. Does the file exist?
+Caused by: Error: Failed to load url ../../src/modules/vehicles/vehicle.service (resolved id: ../../src/modules/vehicles/vehicle.service) in /home/claude/car-dealership-inventory/backend/tests/unit/vehicleService.test.ts. Does the file exist?
+Error: Cannot find module '../../src/modules/vehicles/vehicle.schemas' imported from '/home/claude/car-dealership-inventory/backend/tests/unit/vehicleSchemas.test.ts'
+Error: Cannot find module '../../src/modules/vehicles/vehicle.service' imported from '/home/claude/car-dealership-inventory/backend/tests/unit/vehicleService.test.ts'
+⎯⎯⎯⎯⎯⎯ Failed Tests 53 ⎯⎯⎯⎯⎯⎯⎯
+
+== green-vehicles.log ==
+      Tests  1 failed | 150 passed (151)
+   ✓ PUT /api/vehicles/:id > 404 when the vehicle does not exist 131ms
+ Test Files  1 failed | 9 passed (10)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+== green-vehicles2.log ==
+      Tests  151 passed (151)
+ Test Files  10 passed (10)
+
+== green-vehicles3.log ==
+      Tests  151 passed (151)
+ Test Files  10 passed (10)
+
+== red-inventory.log ==
+      Tests  25 failed | 153 passed (178)
+ Test Files  2 failed | 10 passed (12)
+Caused by: Error: Failed to load url ../../src/modules/inventory/inventory.service (resolved id: ../../src/modules/inventory/inventory.service) in /home/claude/car-dealership-inventory/backend/tests/unit/inventoryService.test.ts. Does the file exist?
+Error: Cannot find module '../../src/modules/inventory/inventory.service' imported from '/home/claude/car-dealership-inventory/backend/tests/unit/inventoryService.test.ts'
+⎯⎯⎯⎯⎯⎯ Failed Tests 25 ⎯⎯⎯⎯⎯⎯⎯
+
+== green-inventory.log ==
+      Tests  190 passed (190)
+ Test Files  12 passed (12)
+
+== concurrency-repeat.log ==
+      Tests  27 passed (27)
+
+== red-frontend.log ==
+      Tests  no tests
+ Test Files  6 failed (6)
+Error: Failed to resolve import "../src/api/endpoints" from "tests/admin.test.tsx". Does the file exist?
+Error: Failed to resolve import "../src/api/endpoints" from "tests/auth-forms.test.tsx". Does the file exist?
+Error: Failed to resolve import "../src/api/endpoints" from "tests/dashboard.test.tsx". Does the file exist?
+Error: Failed to resolve import "../src/api/endpoints" from "tests/header.test.tsx". Does the file exist?
+Error: Failed to resolve import "../src/api/endpoints" from "tests/routes.test.tsx". Does the file exist?
+Error: Failed to resolve import "../src/components/VehicleCard" from "tests/vehicle-card.test.tsx". Does the file exist?
+
+== green1-frontend.log ==
+      Tests  56 failed (56)
+   × VehicleFormPage (edit) > shows an error when the vehicle does not exist 2ms
+ FAIL  tests/admin.test.tsx > VehicleFormPage (edit) > shows an error when the vehicle does not exist
+ Test Files  6 failed (6)
+⎯⎯⎯⎯⎯⎯ Failed Tests 56 ⎯⎯⎯⎯⎯⎯⎯
+
+== green2-frontend.log ==
+      Tests  56 passed (56)
+ Test Files  6 passed (6)
+
+== green-frontend-final.log ==
+      Tests  65 passed (65)
+ Test Files  7 passed (7)
