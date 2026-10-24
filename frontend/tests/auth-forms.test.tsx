@@ -60,7 +60,11 @@ describe('LoginPage', () => {
 });
 
 describe('RegisterPage', () => {
-  async function fill({ name = 'Casey', email = 'casey@example.com', password = 'Str0ngPassw0rd', confirm = password } = {}) {
+  async function fill(opts: { name?: string; email?: string; password?: string; confirm?: string } = {}) {
+    const name = opts.name ?? 'Casey';
+    const email = opts.email ?? 'casey@example.com';
+    const password = opts.password ?? 'Str0ngPassw0rd';
+    const confirm = opts.confirm ?? password;
     if (name) await userEvent.type(screen.getByLabelText('Name'), name);
     if (email) await userEvent.type(screen.getByLabelText('Email'), email);
     if (password) await userEvent.type(screen.getByLabelText('Password'), password);

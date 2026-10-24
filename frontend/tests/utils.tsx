@@ -21,7 +21,7 @@ export function renderApp(ui: ReactElement, { route = '/', user }: Options = {})
     vi.mocked(endpoints.fetchMe).mockResolvedValue(user);
   }
   return render(
-    <MemoryRouter initialEntries={[route]}>
+    <MemoryRouter initialEntries={[route]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ToastProvider>
         <AuthProvider>{ui}</AuthProvider>
       </ToastProvider>

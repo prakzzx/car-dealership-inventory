@@ -9,7 +9,7 @@ function setup(props: Partial<Parameters<typeof VehicleCard>[0]> = {}) {
   const onPurchase = vi.fn();
   const onView = vi.fn();
   render(
-    <MemoryRouter>
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <VehicleCard vehicle={makeVehicle()} isAdmin={false} onPurchase={onPurchase} onView={onView} {...props} />
     </MemoryRouter>,
   );

@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+  /* One consistent, high-contrast keyboard focus ring everywhere. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-signal-500 ring-offset-2;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-card;
+  }
+  .label {
+    @apply mb-1 block text-sm font-medium text-slate-700;
+  }
+  .input {
+    @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-ink placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100 aria-[invalid=true]:border-red-500;
+  }
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-petrol-700 text-white hover:bg-petrol-800 disabled:hover:bg-petrol-700;
+  }
+  .btn-secondary {
+    @apply border border-slate-300 bg-white text-ink hover:bg-slate-50;
+  }
+  .btn-danger {
+    @apply bg-red-700 text-white hover:bg-red-800;
+  }
+  .btn-icon {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100;
+  }
+  .chip {
+    @apply rounded-full bg-petrol-50 px-2.5 py-0.5 text-xs font-medium text-petrol-800;
+  }
+}
