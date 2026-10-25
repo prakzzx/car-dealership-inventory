@@ -21,10 +21,10 @@ All numbers below come from commands that were **actually run** in the AI sandbo
 |---|---|
 | `npm run typecheck` | Passed (backend `tsc --noEmit`, frontend `tsc --noEmit`), no errors |
 | `npm run build` | Passed (backend `tsc`, frontend `tsc --noEmit && vite build`; JS bundle 439.77 kB, 135.98 kB gzip) |
-| `npm test` | **Backend: 12 files, 190 tests passed. Frontend: 7 files, 65 tests passed.** 0 failed, 0 skipped |
+| `npm test` | **Backend: 12 files, 190 tests passed. Frontend: 9 files, 90 tests passed.** 0 failed, 0 skipped |
 | `npm run test:coverage` | Same pass counts; coverage below; configured thresholds passed |
 
-Tests discovered / passed / failed / skipped: **255 / 255 / 0 / 0** (190 backend + 65 frontend).
+Tests discovered / passed / failed / skipped: **280 / 280 / 0 / 0** (190 backend + 90 frontend).
 
 ### Backend (`backend/`) - per file
 
@@ -47,12 +47,14 @@ Tests discovered / passed / failed / skipped: **255 / 255 / 0 / 0** (190 backend
 
 | File | Tests |
 |---|---|
-| tests/dashboard.test.tsx | 16 |
+| tests/dashboard.test.tsx | 17 |
 | tests/auth-forms.test.tsx | 11 |
+| tests/vehicle-card.test.tsx | 11 |
 | tests/admin.test.tsx | 10 |
+| tests/payment.test.tsx | 10 |
+| tests/routes.test.tsx | 10 |
+| tests/cart.test.tsx | 9 |
 | tests/api-layer.test.ts (real axios layer, fake adapter) | 9 |
-| tests/vehicle-card.test.tsx | 8 |
-| tests/routes.test.tsx | 8 |
 | tests/header.test.tsx | 3 |
 
 Page-level frontend tests **mock the API module** (`vi.mock('../src/api/endpoints')`), so they verify UI behaviour, not the real HTTP integration. `api-layer.test.ts` covers the real axios code (headers, response unwrapping, 401 handling) with a fake network adapter. **There are no browser/E2E tests**; the UI was never run in a real browser by me (none was available).
@@ -62,7 +64,7 @@ Page-level frontend tests **mock the API module** (`vi.mock('../src/api/endpoint
 | Package | Statements | Branches | Functions | Lines |
 |---|---|---|---|---|
 | Backend (all of `src/`) | 99.1% | 95.33% | 100% | 99.1% |
-| Frontend (all of `src/`) | 98.29% | 92.3% | 92% | 98.29% |
+| Frontend (all of `src/`) | 98.5% | 90.66% | 91.45% | 98.5% |
 
 Required target (>= 80% for backend services and middleware) is enforced in `backend/vitest.config.ts` via per-glob thresholds, and **passed**: `src/modules/**/*.service.ts` and `src/middleware/**` were each 100% in the report.
 
@@ -90,6 +92,9 @@ Full extract: `docs/test-evidence/tdd-run-summaries.txt`. Highlights:
 | Frontend RED | `6 failed (6)` files, `no tests` (components did not exist) |
 | Frontend GREEN attempt 1 | all failed: duplicate React copies (19 hoisted at root vs 18 in frontend) |
 | Frontend GREEN | `7 passed`, `65 passed` |
+| Cart/payment RED | `8 failed \| 1 passed` files (cart modules missing) |
+| Cart/payment GREEN attempt 1 | `8 failed \| 82 passed` - race: cart loaded in an effect, so /payment redirected to /cart |
+| Cart/payment GREEN | `9 passed (9)` files, `90 passed (90)` tests |
 
 Honest note: in the vehicles RED run, a few tests (for example "PUT ... 404 when the vehicle does not exist", "401 without a token" on not-yet-existing routes) **passed for the wrong reason** because the generic 404/401 handlers produced the expected status. They were still useful once the routes existed, but the RED run is not a pure "all new tests fail".
 
@@ -109,3 +114,4 @@ Honest note: in the vehicles RED run, a few tests (for example "PUT ... 404 when
 6. `npm audit` reports vulnerabilities in dev-time tooling dependency trees (for example the Prisma CLI's `@prisma/config` chain); these are not part of the runtime server code, and I did not run `npm audit fix --force` because it makes breaking changes.
 7. Access tokens are stateless: a deleted user's token is rejected on `/api/auth/me` but other routes trust the signed token until it expires (default 1h). Documented in README Security.
 8. The Purchase model records purchases but there is no UI to list purchase history.
+9. **Cart and payment are client-side/demo.** The cart does not reserve stock on the server, so someone else can buy a car while it sits in your cart (the payment step handles that and says so). Card details are validated in the browser only and are never sent or stored; there is no real payment provider. Paying for several cars makes one atomic purchase call per car, not one transaction for the whole cart, so a later car can fail after an earlier one succeeded (handled and shown, but not rolled back).

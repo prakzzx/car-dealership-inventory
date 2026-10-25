@@ -20,7 +20,7 @@ Run PowerShell commands from the folder shown in brackets. `<repo>` = the extrac
 
 ## D. Test
 - [ ] `[<repo>]` `npm run typecheck` - no errors
-- [ ] `[<repo>]` `npm test` - backend 190 + frontend 65 passing (needs the Docker DB up and `backend\.env` present)
+- [ ] `[<repo>]` `npm test` - backend 190 + frontend 90 passing (needs the Docker DB up and `backend\.env` present)
 - [ ] `[<repo>]` `npm run test:coverage` - coverage tables print; backend thresholds pass
 - [ ] `[<repo>]` `npm run build` - backend and frontend build
 
@@ -34,8 +34,10 @@ Run PowerShell commands from the folder shown in brackets. `<repo>` = the extrac
 | Inventory + stats | Dashboard cards show numbers that change after a purchase or restock |
 | Search/filter/sort | Search `toy`; choose category; set price range; change sort; paginate (12 per page) |
 | Sold-out handling | Tick "Include sold out"; the Silverado card shows "Sold out" and a disabled Purchase button |
-| Purchase | Customer picks quantity -> toast "Purchase confirmed..." -> stock drops immediately |
-| Insufficient stock | Open the app in two browsers, buy the last unit in one, then try in the other: error toast + list refresh |
+| Cart | Purchase on a card -> toast "Added N x ... to your cart", header cart badge counts units, card shows "N in your cart" |
+| Pay bill | Cart icon -> Cart page shows car details and total -> **Pay bill** -> Payment page (demo card `4242 4242 4242 4242`, any future expiry, any 3-digit CVC) |
+| Stock reaches 0 | Buy the last units and pay -> inventory shows "Sold out", quantity box shows 0 and Purchase is disabled |
+| Insufficient stock | Put the last unit in your cart in two browsers, pay in one, then pay in the other: it shows "Only N unit(s) available" and keeps that item in the cart |
 | Customer blocked | As customer, open /admin -> redirected to inventory; `curl` POST /api/vehicles with a customer token -> 403 |
 | Admin add/edit | Manage inventory -> Add vehicle (validation messages) -> Edit |
 | Delete confirmation | Trash icon opens a dialog; Cancel does nothing; Delete removes it |

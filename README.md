@@ -2,7 +2,7 @@
 
 A full-stack TDD kata: a JWT-secured inventory API (Express + Prisma + PostgreSQL) and a React single-page app where customers browse and buy vehicles and admins manage stock. Built test-first (Red -> Green -> Refactor), backend first.
 
-> **Status in one paragraph (read this first).** 255 automated tests pass (190 backend, 65 frontend) with 99.1% backend and 98.29% frontend statement coverage, measured in the AI sandbox against a real PostgreSQL 16. **Not verified there:** Docker Compose, the Prisma CLI migrate commands (their engine could not be downloaded, so the migration SQL is hand-written), Windows/PowerShell, and any visual/browser rendering (no screenshots exist). Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
+> **Status in one paragraph (read this first).** 280 automated tests pass (190 backend, 90 frontend) with 99.1% backend and 98.5% frontend statement coverage, measured in the AI sandbox against a real PostgreSQL 16. **Not verified there:** Docker Compose, the Prisma CLI migrate commands (their engine could not be downloaded, so the migration SQL is hand-written), Windows/PowerShell, and any visual/browser rendering (no screenshots exist). Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 
 ## Contents
 1. [Features](#features) - 2. [Tech stack](#tech-stack) - 3. [Architecture](#architecture) - 4. [Directory tree](#directory-tree) - 5. [Windows prerequisites](#windows-prerequisites) - 6. [Setup (PowerShell)](#setup-windows-powershell) - 7. [Environment variables](#environment-configuration) - 8. [API reference](#api-reference) - 9. [Auth and authorization](#authentication-and-authorization) - 10. [Tests and coverage](#running-tests-and-coverage) - 11. [TDD workflow and commits](#tdd-workflow-and-commit-history) - 12. [Screenshots](#screenshots) - 13. [Troubleshooting](#troubleshooting) - 14. [Security](#security-considerations) - 15. [My AI Usage](#my-ai-usage) - 16. [Future improvements](#future-improvements)
@@ -11,9 +11,11 @@ Other documents: [PROMPTS.md](PROMPTS.md) - [docs/TEST_REPORT.md](docs/TEST_REPO
 
 ## Features
 
-**Customers:** register/login (automatic login after signup), browse in-stock vehicles with summary cards, search by make/model, filter by category and price range, sort, paginate, view details, buy 1..N units with a quantity selector (button disabled at zero stock; clear messages when stock changed under you).
+**Customers:** register/login (automatic login after signup), browse in-stock vehicles with summary cards, search by make/model, filter by category and price range, sort, paginate, view details, add 1..N units to a **cart** with the Purchase button (disabled and showing 0 when sold out or when every available unit is already in the cart), review the cart, press **Pay bill**, and complete a **demo payment** page that performs the real stock-decreasing purchase. Clear messages when stock changed under you.
 
 **Admins:** everything customers can do plus add, edit, delete (with confirmation) and restock vehicles, and see sold-out vehicles. Admin screens are hidden from customers **and** guarded by an admin route **and** enforced by the API.
+
+**Cart and payment (demo):** Purchase adds to a per-user cart (kept in `localStorage`, nothing reserved on the server). Stock only goes down when you pay; paying calls `POST /api/vehicles/:id/purchase` once per cart line. There is no real payment provider: card details are validated in the browser and never sent or stored. If a car sold out meanwhile, the bought items are removed from the cart and the failed one stays with an explanation.
 
 **Platform:** layered API, Zod validation everywhere, uniform JSON response/error shapes, atomic stock updates (no overselling, DB `CHECK (quantity >= 0)` as a last line of defence), purchase audit rows, rate-limited auth, Helmet headers, env-based CORS, 100 kB body limit, `/api/health`.
 
