@@ -1,9 +1,5 @@
 # Screenshots
 
-**No screenshots were captured.** The AI sandbox used to build this project had no web browser, so the UI could not be rendered and photographed. I did not create fake or mock-up images.
-
-To add real ones after you run the app (README steps 1-9):
-
 1. Start everything with `npm run dev` and open http://localhost:5173.
 2. Capture these views (Windows: `Win + Shift + S`) and save them in this folder using these names:
    - `login.png` — Login page
