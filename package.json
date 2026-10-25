@@ -18,6 +18,7 @@
     "dev:frontend": "npm run dev -w frontend",
     "test": "npm run test -w backend && npm run test -w frontend",
     "test:coverage": "npm run test:coverage -w backend && npm run test:coverage -w frontend",
+    "test:ci": "npm run test:ci -w backend && npm run test:ci -w frontend",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
     "db:migrate": "npm run db:migrate -w backend",

@@ -17,3 +17,6 @@ npm-debug.log*
 !.vscode/extensions.json
 .DS_Store
 Thumbs.db
+
+# CI reports
+reports/

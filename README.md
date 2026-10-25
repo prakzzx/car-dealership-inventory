@@ -287,6 +287,7 @@ or separately in two terminals: `npm run dev:backend` and `npm run dev:frontend`
 | `npm run dev:backend` / `dev:frontend` | one side only (`tsx watch` / Vite) |
 | `npm test` | backend then frontend tests |
 | `npm run test:coverage` | same, with coverage tables (+ HTML in `*/coverage/`) |
+| `npm run test:ci` | tests + coverage + JUnit XML reports (used by Jenkins) |
 | `npm run db:up` / `db:down` | start / stop the Docker PostgreSQL |
 | `npm run db:migrate` | `prisma migrate deploy` |
 | `npm run db:seed` | seed admin + 12 vehicles |
@@ -419,6 +420,13 @@ git config user.name "Your Real Name"
 git config user.email "your-real@email"
 ```
 This repository has **no remote and nothing was pushed anywhere**; `git remote -v` prints nothing. The commit bodies say what the AI generated and do not claim manual review.
+
+## Continuous integration (Jenkins)
+
+A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpine` container on a random free port (database `autohub_test`), sets `TEST_DATABASE_URL`, then runs `npm ci`, `npm run typecheck`, `npm run test:ci` (tests + coverage + JUnit XML in `backend/reports/` and `frontend/reports/`) and `npm run build`, and always removes the container afterwards.
+
+- Needs a Linux agent with Docker and a NodeJS tool named `node22` (Node >= 20) under *Manage Jenkins -> Tools*.
+- `npm run test:ci` **was run and verified** in the AI sandbox (190 + 65 tests passed, valid JUnit XML written). **The Jenkinsfile itself has never been run on a Jenkins server**, so expect to adjust tool names, Docker networking (if Jenkins itself runs in a container) or Windows agents (`sh` -> `bat`).
 
 ## Screenshots
 
