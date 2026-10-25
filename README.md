@@ -1,3 +1,5 @@
+#AI contributer is because I used "Your Name <you@example.com>." instead of my github mail please ignore that.
+
 # AutoHub - Car Dealership Inventory System
 
 A full-stack TDD kata: a JWT-secured inventory API (Express + Prisma + PostgreSQL) and a React single-page app where customers browse and buy vehicles and admins manage stock. Built test-first (Red -> Green -> Refactor), backend first.
