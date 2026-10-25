@@ -1,8 +1,8 @@
-# AI contributer is because I used "Your Name <you@example.com>." instead of my github mail please ignore that.
-
 # AutoHub - Car Dealership Inventory System
 
 A full-stack TDD kata: a JWT-secured inventory API (Express + Prisma + PostgreSQL) and a React single-page app where customers browse and buy vehicles and admins manage stock. Built test-first (Red -> Green -> Refactor), backend first.
+
+# AI contributer is because I used "Your Name <you@example.com>." instead of my github mail please ignore that.
 
 > **Status in one paragraph (read this first).** 280 automated tests pass (190 backend, 90 frontend) with 99.1% backend and 98.5% frontend statement coverage, measured in the AI sandbox against a real PostgreSQL 16.  Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 
