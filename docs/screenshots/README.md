@@ -6,11 +6,15 @@ To add real ones after you run the app (README steps 1-9):
 
 1. Start everything with `npm run dev` and open http://localhost:5173.
 2. Capture these views (Windows: `Win + Shift + S`) and save them in this folder using these names:
-   - `01-login.png` - login page
-   - `02-dashboard.png` - inventory dashboard as a customer (stats, filters, cards)
-   - `03-purchase.png` - a purchase success toast
-   - `04-sold-out.png` - a sold-out card with the Purchase button disabled
-   - `05-admin.png` - Manage inventory table (log in as the admin)
-   - `06-vehicle-form.png` - add/edit vehicle form with validation errors
-   - `07-mobile.png` - dashboard at phone width (browser dev tools)
+   - `login.png` — Login page
+   - `registeruser.png` — User registration page
+   - `customer_inventory.png` — Customer inventory dashboard
+   - `0stock.png` — Out-of-stock vehicles
+   - `cart.png` — Shopping cart
+   - `billpayment.png` — Bill payment page
+   - `adminseededlogin.png` — Admin login
+   - `admininventory.png` — Admin inventory management
+   - `addcardetails.png` — Add vehicle details form
+   - `editcars.png` — Edit vehicle details form
+
 3. Reference them from the Screenshots section of the root README.md.
