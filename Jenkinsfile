@@ -1,4 +1,4 @@
-```groovy
+
 // AutoHub CI pipeline.
 // Requires a Linux Jenkins agent with Docker and NodeJS tool "node22".
 pipeline {
