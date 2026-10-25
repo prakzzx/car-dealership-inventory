@@ -465,8 +465,6 @@ A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpi
 
 ## My AI Usage
 
-*(Factual notes about how the AI was used. I did not write any claims here about work I (the student) did by hand.)*
-
 - **Tool used:** Claude (Anthropic), via the claude.ai chat with a code-execution sandbox. Prompts are recorded in [PROMPTS.md](PROMPTS.md).
 - **What Claude was used for:**
   - *Scaffolding:* monorepo layout, Docker Compose, Prisma schema and migration, Vite/Tailwind/Vitest configuration, env files.
