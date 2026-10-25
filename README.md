@@ -428,7 +428,7 @@ This repository has **no remote and nothing was pushed anywhere**; `git remote -
 A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpine` container on a random free port (database `autohub_test`), sets `TEST_DATABASE_URL`, then runs `npm ci`, `npm run typecheck`, `npm run test:ci` (tests + coverage + JUnit XML in `backend/reports/` and `frontend/reports/`) and `npm run build`, and always removes the container afterwards.
 
 - Needs a Linux agent with Docker and a NodeJS tool named `node22` (Node >= 20) under *Manage Jenkins -> Tools*.
-- `npm run test:ci` **was run and verified** in the AI sandbox (190 + 65 tests passed, valid JUnit XML written). **The Jenkinsfile itself has never been run on a Jenkins server**, so expect to adjust tool names, Docker networking (if Jenkins itself runs in a container) or Windows agents (`sh` -> `bat`).
+- `npm run test:ci` **was run and verified** in the AI sandbox (190 backend + 90 frontend tests passed, valid JUnit XML written). **The Jenkinsfile itself has never been run on a Jenkins server**, so expect to adjust tool names, Docker networking (if Jenkins itself runs in a container) or Windows agents (`sh` -> `bat`).
 
 ## Screenshots
 
