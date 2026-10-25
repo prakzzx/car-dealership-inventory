@@ -64,7 +64,7 @@ Page-level frontend tests **mock the API module** (`vi.mock('../src/api/endpoint
 | Package | Statements | Branches | Functions | Lines |
 |---|---|---|---|---|
 | Backend (all of `src/`) | 99.1% | 95.33% | 100% | 99.1% |
-| Frontend (all of `src/`) | 98.5% | 90.66% | 91.45% | 98.5% |
+| Frontend (all of `src/`) | 98.5% | 90.64% | 91.45% | 98.5% |
 
 Required target (>= 80% for backend services and middleware) is enforced in `backend/vitest.config.ts` via per-glob thresholds, and **passed**: `src/modules/**/*.service.ts` and `src/middleware/**` were each 100% in the report.
 
