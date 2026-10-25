@@ -1,10 +1,12 @@
-import { CarFront, LogOut, Menu, X } from 'lucide-react';
+import { CarFront, LogOut, Menu, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 export default function Header() {
   const { user, isAdmin, logout } = useAuth();
+  const { itemCount } = useCart();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
@@ -41,6 +43,19 @@ export default function Header() {
             ) : null}
           </nav>
           <div className="flex items-center gap-3">
+            <Link
+              to="/cart"
+              onClick={() => setOpen(false)}
+              aria-label={itemCount > 0 ? `Cart, ${itemCount} ${itemCount === 1 ? 'item' : 'items'}` : 'Cart'}
+              className="relative inline-flex items-center rounded-md border border-white/25 p-2 hover:bg-white/10"
+            >
+              <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+              {itemCount > 0 ? (
+                <span aria-hidden="true" className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-signal-500 px-1 text-xs font-bold text-white">
+                  {itemCount}
+                </span>
+              ) : null}
+            </Link>
             <div className="text-right text-sm leading-tight">
               <p className="font-medium">{user?.name}</p>
               <p className="text-xs text-petrol-200">{isAdmin ? 'Administrator' : 'Customer'}</p>

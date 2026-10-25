@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getErrorCode, getErrorMessage } from '../api/client';
+import { getErrorMessage } from '../api/client';
 import * as api from '../api/endpoints';
 import Pagination from '../components/Pagination';
 import SearchFilters from '../components/SearchFilters';
@@ -9,6 +9,7 @@ import VehicleCard from '../components/VehicleCard';
 import VehicleCardSkeleton from '../components/VehicleCardSkeleton';
 import VehicleDetailsModal from '../components/VehicleDetailsModal';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { DEFAULT_FILTERS, PAGE_SIZE, buildSearchParams, type FilterState } from '../lib/filters';
 import type { PageMeta, Vehicle, VehicleStats } from '../types';
@@ -18,15 +19,14 @@ type ListState = { status: 'loading' | 'ready' | 'error'; items: Vehicle[]; meta
 export default function DashboardPage() {
   const { isAdmin } = useAuth();
   const toast = useToast();
+  const cart = useCart();
 
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [page, setPage] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
   const [list, setList] = useState<ListState>({ status: 'loading', items: [], meta: null, error: null });
   const [stats, setStats] = useState<VehicleStats | null>(null);
-  const [statsKey, setStatsKey] = useState(0);
   const [selected, setSelected] = useState<Vehicle | null>(null);
-  const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,7 +37,7 @@ export default function DashboardPage() {
     return () => {
       cancelled = true;
     };
-  }, [statsKey]);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -62,25 +62,11 @@ export default function DashboardPage() {
     setReloadKey((k) => k + 1);
   }, []);
 
-  async function handlePurchase(vehicle: Vehicle, quantity: number) {
-    setBusyId(vehicle.id);
-    try {
-      const result = await api.purchaseVehicle(vehicle.id, quantity);
-      toast.success(result.message);
-      // Show the server's authoritative stock immediately, then refresh the summary cards.
-      setList((s) => ({ ...s, items: s.items.map((v) => (v.id === result.vehicle.id ? result.vehicle : v)) }));
-      setStatsKey((k) => k + 1);
-    } catch (error) {
-      toast.error(getErrorMessage(error));
-      // Someone else may have bought the last unit (or an admin changed it): reload so the UI tells the truth.
-      const code = getErrorCode(error);
-      if (code === 'INSUFFICIENT_STOCK' || code === 'NOT_FOUND') {
-        setReloadKey((k) => k + 1);
-        setStatsKey((k) => k + 1);
-      }
-    } finally {
-      setBusyId(null);
-    }
+  // "Purchase" puts the vehicle in the cart. Stock only changes when the person pays (see PaymentPage).
+  function handlePurchase(vehicle: Vehicle, quantity: number) {
+    const added = cart.addItem(vehicle, quantity);
+    if (added === 0) toast.error(`No more units of ${vehicle.make} ${vehicle.model} are available to add.`);
+    else toast.success(`Added ${added} x ${vehicle.make} ${vehicle.model} to your cart`);
   }
 
   const categories = stats?.categories.map((c) => c.category) ?? [];
@@ -118,7 +104,7 @@ export default function DashboardPage() {
               ))
             : list.items.map((vehicle) => (
                 <li key={vehicle.id}>
-                  <VehicleCard vehicle={vehicle} isAdmin={isAdmin} busy={busyId === vehicle.id} onPurchase={handlePurchase} onView={setSelected} />
+                  <VehicleCard vehicle={vehicle} isAdmin={isAdmin} inCart={cart.quantityInCart(vehicle.id)} onPurchase={handlePurchase} onView={setSelected} />
                 </li>
               ))}
         </ul>

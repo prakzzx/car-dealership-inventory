@@ -78,3 +78,42 @@ export function vehicleToFormValues(vehicle?: { make: string; model: string; cat
     imageUrl: vehicle?.imageUrl ?? '',
   };
 }
+
+const luhnValid = (digits: string) => {
+  let sum = 0;
+  for (let i = 0; i < digits.length; i += 1) {
+    let d = Number(digits[digits.length - 1 - i]);
+    if (i % 2 === 1) {
+      d *= 2;
+      if (d > 9) d -= 9;
+    }
+    sum += d;
+  }
+  return sum % 10 === 0;
+};
+
+/**
+ * DEMO payment form. These values are validated in the browser only and are never sent to the API or stored:
+ * the app has no payment provider, so "paying" just triggers the real stock-decreasing purchase calls.
+ */
+export const paymentFormSchema = z.object({
+  cardName: required('Cardholder name').max(80),
+  cardNumber: required('Card number').superRefine((value, ctx) => {
+    const digits = value.replace(/[\s-]/g, '');
+    if (!/^\d{13,19}$/.test(digits) || !luhnValid(digits)) ctx.addIssue({ code: 'custom', message: 'Enter a valid card number' });
+  }),
+  expiry: required('Expiry').superRefine((value, ctx) => {
+    const match = /^(0[1-9]|1[0-2])\/(\d{2})$/.exec(value);
+    if (!match) {
+      ctx.addIssue({ code: 'custom', message: 'Use the format MM/YY' });
+      return;
+    }
+    const month = Number(match[1]);
+    const year = 2000 + Number(match[2]);
+    const now = new Date();
+    if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) ctx.addIssue({ code: 'custom', message: 'This card has expired' });
+  }),
+  cvc: required('CVC').refine((v) => /^\d{3,4}$/.test(v), 'CVC must be 3 or 4 digits'),
+});
+
+export type PaymentFormValues = z.infer<typeof paymentFormSchema>;

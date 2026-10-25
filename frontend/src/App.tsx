@@ -2,9 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import { AdminRoute, ProtectedRoute } from './components/ProtectedRoute';
 import AdminPage from './pages/AdminPage';
+import CartPage from './pages/CartPage';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import PaymentPage from './pages/PaymentPage';
 import RegisterPage from './pages/RegisterPage';
 import VehicleFormPage from './pages/VehicleFormPage';
 
@@ -17,6 +19,8 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="payment" element={<PaymentPage />} />
           <Route element={<AdminRoute />}>
             <Route path="admin" element={<AdminPage />} />
             <Route path="admin/vehicles/new" element={<VehicleFormPage />} />
