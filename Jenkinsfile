@@ -31,6 +31,26 @@ pipeline {
     }
     stage('Install')   { steps { sh 'npm ci' } }
     stage('Typecheck') { steps { sh 'npm run typecheck' } }
+    
+    stage('Debug test discovery') {
+      steps {
+        sh '''
+          echo "=== Current workspace ==="
+          pwd
+          echo "=== Backend test files ==="
+          find backend/tests -type f -name "*.test.ts" -print
+          echo "=== Backend Vitest config ==="
+          cat backend/vitest.config.ts
+          echo "=== Test database variable ==="
+          if [ -n "$TEST_DATABASE_URL" ]; then
+            echo "TEST_DATABASE_URL is set"
+          else
+            echo "TEST_DATABASE_URL is NOT set"
+          fi
+        '''
+      }
+    }
+
     stage('Test + coverage') {
       steps { sh 'npm run test:ci' }
       post {
