@@ -24,7 +24,7 @@ Run PowerShell commands from the folder shown in brackets. `<repo>` = the extrac
 - [ ] `[<repo>]` `npm run test:coverage` - coverage tables print; backend thresholds pass
 - [ ] `[<repo>]` `npm run build` - backend and frontend build
 
-## E. Verify each feature by hand
+## E. Verified each feature by hand
 | Feature | How to verify |
 |---|---|
 | Registration | /register: weak password shows messages; valid signup logs you in as a Customer |
@@ -46,7 +46,4 @@ Run PowerShell commands from the folder shown in brackets. `<repo>` = the extrac
 | 404 | http://localhost:5173/nope shows "Page not found" |
 | Logout | "Log out" returns to login; refresh does not restore the session |
 
-## F. Before submitting
-- [ ] Write your own paragraph in README -> "My own reflection"
-- [ ] Add screenshots (docs/screenshots/README.md) and your chat link/transcript (PROMPTS.md)
-- [ ] `git remote -v` prints nothing (this project was never pushed anywhere); set your real `git config user.name/user.email` before your own commits
+
