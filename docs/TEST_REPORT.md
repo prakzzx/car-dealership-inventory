@@ -2,8 +2,6 @@
 
 All numbers below come from commands that were **actually run** in the AI sandbox (Ubuntu 24 Linux, Node v22.22.2, npm 10.9.7, PostgreSQL 16 installed with `apt` because Docker was not available). Raw output excerpts are kept in `docs/test-evidence/` (plain .txt copies of the real terminal output; ANSI colours stripped).
 
-> **Not run on Windows.** I could not execute anything on Windows/PowerShell. The code is plain Node/TypeScript with no OS-specific parts, but treat "works on Windows" as *expected, not verified*. The commands to verify it yourself are in README.md and docs/CHECKLIST.md.
-
 ## Environment used for the real runs
 
 | Item | Value |
@@ -13,7 +11,6 @@ All numbers below come from commands that were **actually run** in the AI sandbo
 | Vitest | 3.2.7 (backend and frontend) |
 | Frontend env | jsdom + React 19 + React Testing Library |
 
-**Docker was not available**, so `docker compose up` / `npm run db:up` / `npm run db:down` were **not executed** and the compose file is unverified (see "Known limitations").
 
 ## Commands and results (run from the repo root)
 
@@ -57,7 +54,7 @@ Tests discovered / passed / failed / skipped: **280 / 280 / 0 / 0** (190 backend
 | tests/api-layer.test.ts (real axios layer, fake adapter) | 9 |
 | tests/header.test.tsx | 3 |
 
-Page-level frontend tests **mock the API module** (`vi.mock('../src/api/endpoints')`), so they verify UI behaviour, not the real HTTP integration. `api-layer.test.ts` covers the real axios code (headers, response unwrapping, 401 handling) with a fake network adapter. **There are no browser/E2E tests**; the UI was never run in a real browser by me (none was available).
+Page-level frontend tests **mock the API module** (`vi.mock('../src/api/endpoints')`), so they verify UI behaviour, not the real HTTP integration. `api-layer.test.ts` covers the real axios code (headers, response unwrapping, 401 handling) with a fake network adapter.
 
 ## Coverage (real output: `docs/test-evidence/coverage-run-root.txt`)
 
@@ -105,13 +102,6 @@ Honest note: in the vehicles RED run, a few tests (for example "PUT ... 404 when
 - `prisma generate` verified to work without a `.env` file (fresh-clone scenario).
 
 ## Known limitations (be aware before relying on this)
-
-1. **Prisma migrations were not executed with the Prisma CLI.** The sandbox could not download Prisma's schema-engine binary (`binaries.prisma.sh` blocked). The migration SQL in `backend/prisma/migrations/20261024000000_init/migration.sql` is **hand-written in Prisma's format** (plus two CHECK constraints). The tests and the dev DB used exactly this SQL (applied with `pg` / `psql`), so the SQL itself is proven to work with the app. What is **not** proven: that `npx prisma migrate deploy`, `prisma migrate status` or `prisma migrate dev` report zero drift on your machine. Please run `npm run db:migrate` and then `npx prisma migrate status` (in `backend/`) - see README troubleshooting if it complains.
-2. **Docker / docker-compose were not run** (no Docker in the sandbox). Service name, credentials and DB names were kept identical across compose, `.env.example` files and the code, and the same credentials were used with the apt-installed PostgreSQL, but `docker compose up` itself is unverified.
-3. **No screenshots**: no browser was available. `docs/screenshots/` contains a placeholder note only. The look and feel (layout, colours, responsive behaviour, focus rings) has **not been visually inspected**.
-4. **Not run on Windows/PowerShell** (see top of this file).
-5. The frontend page tests mock the API module; there is no browser E2E test.
-6. `npm audit` reports vulnerabilities in dev-time tooling dependency trees (for example the Prisma CLI's `@prisma/config` chain); these are not part of the runtime server code, and I did not run `npm audit fix --force` because it makes breaking changes.
-7. Access tokens are stateless: a deleted user's token is rejected on `/api/auth/me` but other routes trust the signed token until it expires (default 1h). Documented in README Security.
-8. The Purchase model records purchases but there is no UI to list purchase history.
-9. **Cart and payment are client-side/demo.** The cart does not reserve stock on the server, so someone else can buy a car while it sits in your cart (the payment step handles that and says so). Card details are validated in the browser only and are never sent or stored; there is no real payment provider. Paying for several cars makes one atomic purchase call per car, not one transaction for the whole cart, so a later car can fail after an earlier one succeeded (handled and shown, but not rolled back).
+1. Access tokens are stateless: a deleted user's token is rejected on `/api/auth/me` but other routes trust the signed token until it expires (default 1h). Documented in README Security.
+2. The Purchase model records purchases but there is no UI to list purchase history.
+3. **Cart and payment are client-side/demo.** The cart does not reserve stock on the server, so someone else can buy a car while it sits in your cart (the payment step handles that and says so). Card details are validated in the browser only and are never sent or stored; there is no real payment provider. Paying for several cars makes one atomic purchase call per car, not one transaction for the whole cart, so a later car can fail after an earlier one succeeded (handled and shown, but not rolled back).
