@@ -26,6 +26,11 @@ describe('route protection', () => {
     expect(await screen.findByRole('heading', { name: 'Sign in to AutoHub' })).toBeInTheDocument();
   });
 
+  it.each(['/cart', '/payment'])('redirects an anonymous visitor away from %s', async (route) => {
+    renderApp(<App />, { route });
+    expect(await screen.findByRole('heading', { name: 'Sign in to AutoHub' })).toBeInTheDocument();
+  });
+
   it('lets a customer see the inventory', async () => {
     renderApp(<App />, { route: '/', user: customerUser });
     expect(await screen.findByRole('heading', { name: 'Inventory' })).toBeInTheDocument();

@@ -39,3 +39,8 @@ export const stats: VehicleStats = {
 export function apiError(status: number, code: string, message: string, details?: unknown) {
   return Object.assign(new Error(message), { isAxiosError: true, response: { status, data: { success: false, error: { code, message, details } } } });
 }
+
+/** Pre-fill the persisted cart for a user (same storage key/format the app uses). */
+export function seedCart(userId: string, items: { vehicle: Vehicle; quantity: number }[]) {
+  localStorage.setItem(`autohub.cart.${userId}`, JSON.stringify(items));
+}

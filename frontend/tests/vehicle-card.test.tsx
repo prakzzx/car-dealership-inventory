@@ -34,6 +34,27 @@ describe('VehicleCard', () => {
     expect(onPurchase).not.toHaveBeenCalled();
   });
 
+  it('shows 0 in the quantity box when the vehicle is sold out', () => {
+    setup({ vehicle: makeVehicle({ quantity: 0 }) });
+    expect(screen.getByLabelText('Quantity for Toyota Camry')).toHaveValue(0);
+  });
+
+  it('disables purchase once every available unit is already in the cart', () => {
+    const { onPurchase } = setup({ vehicle: makeVehicle({ quantity: 3 }), inCart: 3 });
+    expect(screen.getByRole('button', { name: 'Purchase Toyota Camry' })).toBeDisabled();
+    expect(screen.getByLabelText('Quantity for Toyota Camry')).toHaveValue(0);
+    expect(screen.getByRole('article', { name: 'Toyota Camry' })).toHaveTextContent('All available units are in your cart');
+    expect(onPurchase).not.toHaveBeenCalled();
+  });
+
+  it('mentions how many units are already in the cart and limits the selector to the rest', () => {
+    setup({ vehicle: makeVehicle({ quantity: 5 }), inCart: 2 });
+    const card = screen.getByRole('article', { name: 'Toyota Camry' });
+    expect(card).toHaveTextContent('5 in stock');
+    expect(card).toHaveTextContent('2 in your cart');
+    expect(screen.getByLabelText('Quantity for Toyota Camry')).toHaveAttribute('max', '3');
+  });
+
   it('purchases the chosen quantity', async () => {
     const { onPurchase } = setup();
     const qty = screen.getByLabelText('Quantity for Toyota Camry');

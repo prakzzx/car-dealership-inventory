@@ -137,33 +137,37 @@ describe('DashboardPage - search, filter, sort, pagination', () => {
   });
 });
 
-describe('DashboardPage - purchasing', () => {
-  it('purchases, shows the confirmation and refreshes stock in the UI', async () => {
-    vi.mocked(api.purchaseVehicle).mockResolvedValue({
-      vehicle: { ...camry, quantity: 3 },
-      purchase: { id: 'p1', vehicleId: 'v-1', userId: 'u', vehicleName: 'Toyota Camry', quantity: 2, unitPrice: 28995, totalPrice: 57990, createdAt: '2026-01-01T00:00:00Z' },
-      message: 'Purchase confirmed: 2 x Toyota Camry',
-    });
+describe('DashboardPage - purchasing (adds to cart)', () => {
+  it('Purchase adds the chosen quantity to the cart without touching stock yet', async () => {
     renderApp(<DashboardPage />, { user: customerUser });
     const card = await screen.findByRole('article', { name: 'Toyota Camry' });
     const qty = within(card).getByLabelText('Quantity for Toyota Camry');
     await userEvent.clear(qty);
     await userEvent.type(qty, '2');
     await userEvent.click(within(card).getByRole('button', { name: 'Purchase Toyota Camry' }));
-    expect(api.purchaseVehicle).toHaveBeenCalledWith('v-1', 2);
-    expect(await screen.findByRole('status')).toHaveTextContent('Purchase confirmed: 2 x Toyota Camry');
-    await waitFor(() => expect(screen.getByRole('article', { name: 'Toyota Camry' })).toHaveTextContent('3 in stock'));
-    expect(vi.mocked(api.fetchStats).mock.calls.length).toBeGreaterThan(1); // summary cards re-fetched
+    expect(await screen.findByRole('status')).toHaveTextContent('Added 2 x Toyota Camry to your cart');
+    expect(api.purchaseVehicle).not.toHaveBeenCalled(); // money/stock only move at payment
+    expect(screen.getByRole('article', { name: 'Toyota Camry' })).toHaveTextContent('2 in your cart');
+    expect(JSON.parse(localStorage.getItem('autohub.cart.u-customer') ?? '[]')).toEqual([expect.objectContaining({ quantity: 2, vehicle: expect.objectContaining({ id: 'v-1' }) })]);
   });
 
-  it('handles insufficient stock (concurrent change): shows the message and reloads the list', async () => {
-    vi.mocked(api.purchaseVehicle).mockRejectedValue(apiError(409, 'INSUFFICIENT_STOCK', 'Only 1 unit(s) available', { available: 1, requested: 2 }));
+  it('disables Purchase and says so once all units are in the cart', async () => {
     renderApp(<DashboardPage />, { user: customerUser });
     const card = await screen.findByRole('article', { name: 'Toyota Camry' });
-    const searchCalls = vi.mocked(api.searchVehicles).mock.calls.length;
+    const qty = within(card).getByLabelText('Quantity for Toyota Camry');
+    await userEvent.clear(qty);
+    await userEvent.type(qty, '5');
     await userEvent.click(within(card).getByRole('button', { name: 'Purchase Toyota Camry' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent('Only 1 unit(s) available');
-    await waitFor(() => expect(vi.mocked(api.searchVehicles).mock.calls.length).toBeGreaterThan(searchCalls));
+    await waitFor(() => expect(within(screen.getByRole('article', { name: 'Toyota Camry' })).getByRole('button', { name: 'Purchase Toyota Camry' })).toBeDisabled());
+    expect(screen.getByRole('article', { name: 'Toyota Camry' })).toHaveTextContent('All available units are in your cart');
+    expect(within(screen.getByRole('article', { name: 'Toyota Camry' })).getByLabelText('Quantity for Toyota Camry')).toHaveValue(0);
+  });
+
+  it('a sold-out vehicle shows 0 and a disabled Purchase button', async () => {
+    renderApp(<DashboardPage />, { user: customerUser });
+    const card = await screen.findByRole('article', { name: 'Chevrolet Silverado' });
+    expect(within(card).getByLabelText('Quantity for Chevrolet Silverado')).toHaveValue(0);
+    expect(within(card).getByRole('button', { name: 'Purchase Chevrolet Silverado' })).toBeDisabled();
   });
 });
 

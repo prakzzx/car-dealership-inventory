@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import * as endpoints from '../src/api/endpoints';
 import { TOKEN_STORAGE_KEY } from '../src/api/client';
 import { AuthProvider } from '../src/context/AuthContext';
+import { CartProvider } from '../src/context/CartContext';
 import { ToastProvider } from '../src/context/ToastContext';
 import type { User } from '../src/types';
 
@@ -23,7 +24,9 @@ export function renderApp(ui: ReactElement, { route = '/', user }: Options = {})
   return render(
     <MemoryRouter initialEntries={[route]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ToastProvider>
-        <AuthProvider>{ui}</AuthProvider>
+        <AuthProvider>
+          <CartProvider>{ui}</CartProvider>
+        </AuthProvider>
       </ToastProvider>
     </MemoryRouter>,
   );
