@@ -1,13 +1,13 @@
 # PROMPTS.md
 
-This file records the prompts I (the student) sent to the AI assistant while building this project.
-Responses are **not** summarised or invented here. See "How to attach the full raw chat" at the bottom.
+This file records the prompts I Prakati N sent to the AI assistant while building this project.
+Responses are **not** summarised or invented here below. 
 
-Tool used: Claude (Anthropic), via the claude.ai chat interface.
+Tool used:Chatgpt(for prompt generation), Claude (for prompt and poject generation), via the claude.ai chat interface.
 
 ---
 
-## Prompt 1 (verbatim, first message)
+## Prompt  (verbatim, first message)
 
 ````text
 You are a senior full-stack engineer, architect, QA engineer and UI/UX designer. Build the complete "Car Dealership Inventory System" TDD kata below as a real, runnable project I can download as a ZIP, extract on Windows, open in VS Code and run locally. Create actual files with full implementations, not snippets, pseudocode or tutorials.
@@ -122,35 +122,9 @@ Do not stop after the plan; continue through delivery.
 
 ---
 
-## Prompt 2 (verbatim, follow-up message sent in the same chat)
+## Prompt  (verbatim, follow-up message sent in the same chat)
 
 ````text
-make sure nothing is pushed to github and you are only generating the zip file that i can download and run on vscode.
+make sure nothing is pushed to github and you are only generating the zip file that i can download and run on vscode.connect it to prisma and docker using the current file. add jenkins file to run tests on jenkins.
 ````
 
----
-
-## Prompt 3 and later (verbatim)
-
-The only further messages I sent in the same chat were the single word below (sent to let the assistant continue working):
-
-````text
-Continue
-````
-
----
-
-## How to attach the full raw chat (DO THIS BEFORE SUBMISSION)
-
-This file only holds the prompts. The assistant's replies and the full back-and-forth are **not** included and must not be invented. Before you submit:
-
-1. Open the chat in claude.ai.
-2. Either:
-   - **Share link:** use the chat's "Share" option, create a public link, and paste it below; or
-   - **Raw transcript:** select the whole conversation, copy it, and paste it into the section below (or save it as `docs/CHAT_TRANSCRIPT.md` and link to it from here).
-3. Re-read it once to make sure nothing private (keys, passwords) is in it.
-4. Commit it with your own identity, e.g. `git commit -m "docs: add full AI chat transcript"` (this commit has no AI co-author trailer because you made it yourself).
-
-**Public share link:** _(paste here)_
-
-**Full raw chat:** _(paste here, or link to docs/CHAT_TRANSCRIPT.md)_
