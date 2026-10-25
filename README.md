@@ -1,4 +1,4 @@
-#AI contributer is because I used "Your Name <you@example.com>." instead of my github mail please ignore that.
+# AI contributer is because I used "Your Name <you@example.com>." instead of my github mail please ignore that.
 
 # AutoHub - Car Dealership Inventory System
 
