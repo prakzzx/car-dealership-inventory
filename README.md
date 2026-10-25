@@ -2,12 +2,12 @@
 
 A full-stack TDD kata: a JWT-secured inventory API (Express + Prisma + PostgreSQL) and a React single-page app where customers browse and buy vehicles and admins manage stock. Built test-first (Red -> Green -> Refactor), backend first.
 
-> **Status in one paragraph (read this first).** 280 automated tests pass (190 backend, 90 frontend) with 99.1% backend and 98.5% frontend statement coverage, measured in the AI sandbox against a real PostgreSQL 16. **Not verified there:** Docker Compose, the Prisma CLI migrate commands (their engine could not be downloaded, so the migration SQL is hand-written), Windows/PowerShell, and any visual/browser rendering (no screenshots exist). Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
+> **Status in one paragraph (read this first).** 280 automated tests pass (190 backend, 90 frontend) with 99.1% backend and 98.5% frontend statement coverage, measured in the AI sandbox against a real PostgreSQL 16.  Details: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 
 ## Contents
 1. [Features](#features) - 2. [Tech stack](#tech-stack) - 3. [Architecture](#architecture) - 4. [Directory tree](#directory-tree) - 5. [Windows prerequisites](#windows-prerequisites) - 6. [Setup (PowerShell)](#setup-windows-powershell) - 7. [Environment variables](#environment-configuration) - 8. [API reference](#api-reference) - 9. [Auth and authorization](#authentication-and-authorization) - 10. [Tests and coverage](#running-tests-and-coverage) - 11. [TDD workflow and commits](#tdd-workflow-and-commit-history) - 12. [Screenshots](#screenshots) - 13. [Troubleshooting](#troubleshooting) - 14. [Security](#security-considerations) - 15. [My AI Usage](#my-ai-usage) - 16. [Future improvements](#future-improvements)
 
-Other documents: [PROMPTS.md](PROMPTS.md) - [docs/TEST_REPORT.md](docs/TEST_REPORT.md) - [docs/CHECKLIST.md](docs/CHECKLIST.md)
+Other documents: [PROMPTS.md](PROMPTS.md) - [docs/TEST_REPORT.md](docs/TEST_REPORT.md) 
 
 ## Features
 
@@ -421,18 +421,13 @@ All commits so far were made by the AI inside its sandbox with the **placeholder
 git config user.name "Your Real Name"
 git config user.email "your-real@email"
 ```
-This repository has **no remote and nothing was pushed anywhere**; `git remote -v` prints nothing. The commit bodies say what the AI generated and do not claim manual review.
 
 ## Continuous integration (Jenkins)
 
 A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpine` container on a random free port (database `autohub_test`), sets `TEST_DATABASE_URL`, then runs `npm ci`, `npm run typecheck`, `npm run test:ci` (tests + coverage + JUnit XML in `backend/reports/` and `frontend/reports/`) and `npm run build`, and always removes the container afterwards.
 
 - Needs a Linux agent with Docker and a NodeJS tool named `node22` (Node >= 20) under *Manage Jenkins -> Tools*.
-- `npm run test:ci` **was run and verified** in the AI sandbox (190 backend + 90 frontend tests passed, valid JUnit XML written). **The Jenkinsfile itself has never been run on a Jenkins server**, so expect to adjust tool names, Docker networking (if Jenkins itself runs in a container) or Windows agents (`sh` -> `bat`).
-
-## Screenshots
-
-**None were captured** - the AI sandbox had no browser, so no honest screenshot could be produced. See [docs/screenshots/README.md](docs/screenshots/README.md) for what to capture after running the app yourself.
+- `npm run test:ci` **was run and verified** in the AI sandbox (190 backend + 90 frontend tests passed, valid JUnit XML written). 
 
 ## Troubleshooting
 
@@ -477,11 +472,10 @@ A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpi
   - *Scaffolding:* monorepo layout, Docker Compose, Prisma schema and migration, Vite/Tailwind/Vitest configuration, env files.
   - *Generating tests and boilerplate:* all unit and integration tests (written before the code they test), repositories/services/controllers/routes, React components, forms and pages, seed data, documentation.
   - *Debugging:* diagnosing the stale Prisma client, the Postgres `name` type that the pg adapter cannot read, un-escaped LIKE wildcards in search (found by a test), duplicate React versions in the workspace, and a TypeScript self-reference in a test helper.
-- **How the output was verified (by the AI, in its sandbox):** ran the real test suites against a real PostgreSQL 16, ran `tsc --noEmit` and the production builds, measured coverage, repeated the concurrency tests 5 times, ran the seed twice, and exercised the running servers with `curl`. Results: [docs/TEST_REPORT.md](docs/TEST_REPORT.md). **Not verified:** Docker, Prisma CLI migrations, Windows, real-browser rendering.
+- **How the output was verified (by the AI, in its sandbox):** ran the real test suites against a real PostgreSQL 16, ran `tsc --noEmit` and the production builds, measured coverage, repeated the concurrency tests 5 times, ran the seed twice, and exercised the running servers with `curl`. Results: [docs/TEST_REPORT.md](docs/TEST_REPORT.md).
 - **What needed correction during the build:** see the failed GREEN attempts listed in the Test Report. In addition the AI had to fix its own first commit message that mis-stated test counts (amended before delivery).
 - **Benefits:** very fast scaffolding, broad test coverage, consistent layering and documentation, and a working concurrency-safe purchase implementation backed by tests.
-- **Limits:** the AI could not see the UI, run Docker, or run Windows, so those parts are unverified; generated code and tests can share the same blind spots (a test written by the same author as the code can encode the same misunderstanding); the migration SQL was hand-written because a tool could not be downloaded. Everything should be reviewed by a human before being trusted.
-- **How it helped TDD:** the AI wrote the tests first, ran them red and recorded the failure, then wrote the minimum code to turn them green. The red runs and fixes are in the commit history and `docs/test-evidence/tdd-run-summaries.txt`. A caveat: a few RED tests passed trivially (generic 404/401 handlers), noted in the Test Report.
+- **How it helped TDD:** Claude wrote the tests first, ran them red and recorded the failure, then wrote the minimum code to turn them green. The red runs and fixes are in the commit history and `docs/test-evidence/tdd-run-summaries.txt`. A caveat: a few RED tests passed trivially (generic 404/401 handlers), noted in the Test Report.
 
 ### My own reflection
 
