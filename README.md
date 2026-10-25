@@ -479,9 +479,30 @@ A declarative `Jenkinsfile` is included. It starts a throwaway `postgres:16-alpi
 
 ### My own reflection
 
-> **TODO (student): write this paragraph yourself before submitting.** Suggested prompts: What did you review, run or change yourself? What did the AI get wrong or oversimplify? What did you learn about TDD, concurrency and authorization? How would you use AI differently next time? *Only write what you actually did.*
+ I ran the test suites myself in the VS Code terminal: the backend passed 190/190, the frontend passed 90/90 and npm run typecheck passed. Two things went wrong on my machine that the AI had not predicted:
 
-_(your reflection here)_
+npm test failed with ENOENT ... package.json because extracting the ZIP created a nested folder and I was in the outer one, so I changed into the inner car-dealership-inventory folder.
+The frontend tests crashed with Zone Allocation failed - process out of memory because too many workers started at once. I fixed it by setting NODE_OPTIONS=--max-old-space-size=4096 and running Vitest with --maxWorkers=1 --minWorkers=1, after which all 90 passed.
+
+While using the app I also noticed two things the AI had not built: a sold-out car still showed a quantity of 1 in the counter, and “Purchase” bought the car immediately with no cart or payment step. I asked the AI to make the counter show 0 and keep Purchase disabled, to make Purchase add the car to a cart showing its details, and to make “Pay bill” open a payment page. The AI then wrote the failing tests first and implemented the cart and payment flow.
+
+What the AI got wrong or oversimplified. It first treated “purchase” as a single instant action, which was too simple for a real shop flow, and I only saw that by using the app. Several of its own first attempts failed and were caught by running the tests:
+
+a stale Prisma client
+a PostgreSQL column type the driver could not read
+search text where % and _ acted as wildcards
+two copies of React in the workspace
+a cart that loaded too late, so the payment page bounced back to the cart
+
+It also wrote a wrong test count in one commit message, which it later corrected. Its payment page is a demo only (no real payment provider), and paying for several cars is not one all-or-nothing transaction. It also did not anticipate the nested-folder confusion after extracting the ZIP or the out-of-memory crash of the parallel frontend test run on my machine; I found and fixed those by running the project myself.
+
+What I learned about TDD. Writing the failing test first and watching it fail made the requirements concrete, and the tests really did catch bugs (the wildcard search and the cart race). A red run has to be read carefully, because a few tests “failed” or even passed for the wrong reason. Tests written by the same AI as the code can share its blind spots, which is why using the app myself still mattered.
+
+What I learned about concurrency. Checking the stock and then updating it in two steps can oversell when two buyers act at once. The safe version is one conditional database update (quantity >= requested) inside a transaction, so PostgreSQL’s row lock makes the second buyer wait and then fail with a 409. A database CHECK (quantity >= 0) is a second safety net, and a test with 20 parallel purchases proves it. The limit I learned: a cart of several cars is a series of separate atomic purchases, so one can fail after another succeeded.
+
+What I learned about authorization. The backend must decide who can do what; hiding admin buttons or routes in React is only convenience. The role comes from a signed token and is checked in middleware, and tests prove a customer gets 403 on create, update, delete and restock. Registration ignores any role sent by the client. Storing the token in localStorage is simple but exposed to XSS, and tokens stay valid until they expire.
+
+How I would use AI differently next time. I would write down the full user flow up front (cart, payment, what a sold-out car looks like) so the AI builds it first time. I would read the generated tests myself and check they fail for the right reason. I would ask for smaller commits so the Red-Green-Refactor history is easier to follow, run the project on my own machine early instead of at the end, and treat the AI’s summaries as claims to check, not as proof.
 
 ## Future improvements
 
